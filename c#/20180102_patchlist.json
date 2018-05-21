@@ -1,7 +1,7 @@
 {
     "VersionCode": "1.0.2.1234",
     "FileList": [
-        ["name", 5, "md5", "abname"],
-        ["name", 5, "md5", "abname"]
+        ["name", "5", "md5", "abname"],
+        ["name", "5", "md5", "abname"]
      ]
 }
