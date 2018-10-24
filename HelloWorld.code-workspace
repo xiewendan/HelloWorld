@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": "c#"
+		},
+		{
+			"path": "c++"
+		},
+		{
+			"path": "git"
+		},
+		{
+			"path": "lua"
+		},
+		{
+			"path": "python"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"iostream": "cpp"
+		}
+	}
+}
