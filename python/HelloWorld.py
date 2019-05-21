@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 
 # __author__ = xiaobao
-# __date__ = 2018/07/05 12:52:08
+# __date__ = 2018/12/03 19:29:18
 
-# desc: xcj
-print("xjc")
+# desc: desc
+
+import shutil
+
+def main():
+    print("xjc")
+
+if __name__ == '__main__':
+    main()

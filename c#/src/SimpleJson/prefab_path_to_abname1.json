@@ -1,0 +1,11 @@
+{
+    "ArtRes/Scenes/login.unity" : "artres_scenes_login_unity.ab",
+    "ArtRes/Scenes/testsence/GameObject.prefab" : "artres_scenes_testsence_gameobject_prefab.ab",
+    "ArtRes/UI/Export/FGUIExport/Common_atlas0.png" : "artres_ui_export_fguiexport_common_res.ab",
+    "ArtRes/UI/Export/FGUIExport/Common_fui.bytes" : "artres_ui_export_fguiexport_common_fui.ab",
+    "ArtRes/UI/Export/FGUIExport/Fuben_fui.bytes" : "artres_ui_export_fguiexport_fuben_fui.ab",
+    "ArtRes/UI/Export/FGUIExport/login_fui.bytes" : "artres_ui_export_fguiexport_login_fui.ab",
+    "ArtRes/UI/Export/FGUIExport/Lobby_fui.bytes" : "artres_ui_export_fguiexport_lobby_fui.ab",
+    "ArtRes/UI/Export/FGUIExport/Loading_fui.bytes" : "artres_ui_export_fguiexport_loading_fui.ab",
+    "ArtRes/UI/Export/FGUIExport/Battle_fui.bytes" : "artres_ui_export_fguiexport_battle_fui.ab"
+}
