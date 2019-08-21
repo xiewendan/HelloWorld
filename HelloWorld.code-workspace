@@ -15,10 +15,5 @@
 		{
 			"path": "python"
 		}
-	],
-	"settings": {
-		"files.associations": {
-			"iostream": "cpp"
-		}
-	}
+	]
 }
