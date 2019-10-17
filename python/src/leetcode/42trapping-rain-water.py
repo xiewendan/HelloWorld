@@ -18,9 +18,96 @@
 
 
 
+class MinMaxPair(object):
+    def __init__(self, nMin, nMax):
+        assert(0 <= nMin < nMax)
+        self.m_nMin = nMin
+        self.m_nMax = nMax
+    
+    def Include(self, onePair):
+        return self.Min() <= onePair.Min() and onePair.Max() <= self.Max()
+    
+    def Min(self):
+        return self.m_nMin
+    
+    def Max(self):
+        return self.m_nMax
+
+class StackCls(object):
+    def __init__(self):
+        self.m_listObj = []
+        self.m_nCount = 0
+    
+    def Push(self, obj):
+        self.m_nCount += 1
+        self.m_listObj.append(obj)
+
+    def Pop(self):
+        if self.m_nCount <= 0:
+            return None
+        self.m_nCount -= 1
+        return self.m_listObj.pop()
+    
+    def Last(self):
+        if self.m_nCount > 0:
+            return self.m_listObj[self.m_nCount]
+        return None
+    
+    def IsEmpty(self):
+        return self.m_nCount == 0
+        
+
 class Solution:
     def trap(self, height):
-        pass
+        nLen = len(height)
+        if nLen < 3:
+            return 0
+        
+        indexStackObj = StackCls()
+        indexPairStackObj = StackCls()
+        for nCurIndex in range(nLen):
+            nCurHeight = height[nCurIndex]
 
-solution = Solution()
-assert(solution)
+            nLeftIndex = None
+            while not indexStackObj.IsEmpty():
+                nPreIndex = indexStackObj.Pop()
+                nPreHeight = height[nPreIndex]
+                
+                if nCurHeight < nPreHeight:
+                    nLeftIndex = nPreIndex
+                    indexStackObj.Push(nPreIndex)
+                    break
+                elif nCurHeight == nPreHeight:
+                    nLeftIndex = nPreIndex
+                    break
+                else:
+                    nLeftIndex = nPreIndex
+            
+            indexStackObj.Push(nCurIndex)
+
+            if nLeftIndex is None:
+                pass
+            elif nCurIndex - nLeftIndex <= 1:
+                pass
+            else:
+                newPair = MinMaxPair(nLeftIndex, nCurIndex)
+                while not indexPairStackObj.IsEmpty():
+                    oldPair = indexPairStackObj.Pop()
+                    if newPair.Include(oldPair):
+                        pass
+                    else:
+                        indexPairStackObj.Push(oldPair)
+                        break
+                indexPairStackObj.Push(newPair)
+            
+        
+        nSum = 0
+        while not indexPairStackObj.IsEmpty():
+            indexPair = indexPairStackObj.Pop()
+            nMin = indexPair.Min()
+            nMax = indexPair.Max()
+            nMinHeight = min(height[nMin], height[nMax])
+            for nIndex in range(nMin, nMax):
+                nSum += max(nMinHeight - height[nIndex],0)
+        
+        return nSum
