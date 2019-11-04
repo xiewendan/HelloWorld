@@ -133,15 +133,18 @@
 # 思路二
 # 两层变量
 # 1、先删除超过四个的元素
-# 2、排序
-# 3、缓存两个数之和
-# 4、将四个数之和转为两个数之和的问题
+# 2、处理四个相同元素
+# 3、处理三个相同元素
+# 4、排序
+# 5、缓存两个数之和
+# 6、将四个数之和转为两个数之和的问题
 # 注：剪枝条件
 class Solution:
     # def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
     def fourSum(self, nums, target):
         dictNum2Count = {}
         listDiffNums = []
+
         listResult = []
 
         for value in nums:
@@ -185,11 +188,22 @@ class Solution:
         minSum = 2 * listDiffNums[0]
         maxSum = 2 * listDiffNums[nLen-1]
 
+
         for nIndex1 in range(nLen):
             value1 = listDiffNums[nIndex1]
             value1Count = dictNum2Count[value1]
+
+            # 剪枝
+            if 2 * value1 + minSum > target:
+                break
+
+            # 剪枝
+            if value1 + listDiffNums[-1] + maxSum < target:
+                continue
+
             if value1Count >= 2:
                 sum = value1 + value1
+
                 if sum not in dictTwoSum:
                     dictTwoSum[sum] = [[nIndex1, nIndex1]]
                 else:
@@ -198,6 +212,10 @@ class Solution:
             for nIndex2 in range( nIndex1 + 1, nLen):
                 value2 = listDiffNums[nIndex2]
                 sum = value1 + value2
+
+                # 剪枝
+                if sum + minSum > target:
+                    break
 
                 if sum not in dictTwoSum:
                     dictTwoSum[sum] = [[nIndex1, nIndex2]]
@@ -224,7 +242,7 @@ class Solution:
                                 if result not in listResult:
                                     listResult.append(result)
             
-        return listResult
+        return list(listResult)
 
 
 def ListEqual(l1, l2):
@@ -280,6 +298,8 @@ assert(ListListEqual(solution.fourSum([1, 1, 1, 1], 5), []))
 assert(ListListEqual(solution.fourSum([2, 1, 1, 1], 5), [[1, 1, 1, 2]]))
 assert(ListListEqual(solution.fourSum([2, 1, 1, 1], 6), []))
 #   两个元素相同：
+print(solution.fourSum([2, 2, 1, 1], 6))
+
 assert(ListListEqual(solution.fourSum([2, 2, 1, 1], 6), [[1, 1, 2, 2]]))
 assert(ListListEqual(solution.fourSum([2, 2, 1, 1], 7), []))
 #   没有元素相同
