@@ -54,81 +54,69 @@
 # 链接：https://leetcode-cn.com/problems/regular-expression-matching
 # 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
-# 思路
-# 1、如果*不是贪心算法，则需要处理p：p中，*前面的字符和*后面的字符相同，则将*后面的那个字符删除，确保 aaa和a*a匹配。
-# 2、两个指针，a指向s的第一个字符，b指向p的第一个字符。根据情况移动指针
-#    2.1、b所指字符是*，则循环移动a指向字符，直到与b的last字符不等
-#    2.2、a,b所指向字符不等，则直接停止
-#    2.3、a,b所指向字符相等，则同时移动a，b
-# 3、判断两个指针是否都指向末尾，是的话则匹配；否则不匹配
+# 思路：动态规划
+# s[i,j] = 
+#   0) s[:,0] = False, s[0,0] = True, s[0,:] 看情况 s[0,奇数] = False, p[2] = * 则s[0,2] = True, p[2n] = p[2n-2]
+#   1) p[j] == .        s[i-1, j-1]
+#   2) p[j] == *        
+#       p[j-1] == s[i]   s[i-1, j] or s[i, j-1] or (s[i, j-2] if j > 2)
+#       p[j-1] == .      s[i-1, j] or s[i, j-1] or (s[i, j-2] if j > 2)
+#       p[j-1] == *      False
+#       p[j-1] != s[i]   s[i, j-2]
+#   3) p[j] == s[i]     s[i-1, j-1]
+#   4) p[j] != s[i]     False
+# 减枝：将p优化，如果存在相同的可以优化掉
 # 复杂度（时间/空间）
-# 时间 o(n)
-# 空间 o(1)
+# 时间 o(m*n)
+# 空间 o(m*n)
 # 代码
 class Solution:
+    # def isMatch(self, s: str, p: str) -> bool:
     def isMatch(self, s, p):
         nLenS = len(s)
         nLenP = len(p)
 
-        # if nLenS == 0:
-        #     if nLenP == 0:
-        #         return True
-        #     else:
-        #         return False
-        # else:
-        #     if nLenP == 0:
-        #         return False
-        
-        if nLenP > 0 and p[0] == "*":
-            return False
-        
-        nIndexS = 0
-        nIndexP = 0
+        subset = []
+        for i in range(1+nLenS):
+            subset.append([False]*(1+nLenP))
+        for i in range(1+nLenS):
+            subset[i][0] = False
+        subset[0][0] = True
 
-        lastCharP = ""
-        while nIndexS < nLenS and nIndexP < nLenP:
-            curCharS = s[nIndexS]
-            curCharP = p[nIndexP]
-
-            if curCharP == "*":
-                if self.isCharEqual(curCharS, lastCharP):
-                    nIndexS += 1
-                else:
-                    nIndexP += 1
-                    lastCharP = curCharP
-
+        for i in range(1,nLenP+1,2):
+            subset[0][i] = False
+            
+        for i in range(2,nLenP+1,2):
+            if p[i-1] == '*':
+                subset[0][i] = subset[0][i-2]
             else:
-                if self.isCharEqual(curCharS, curCharP):
-                    nIndexS += 1
-                    nIndexP += 1
-                    lastCharP = curCharP
-                    continue
+                subset[0][i] = False
+
+        for i in range(1, nLenS+1):
+            curCharS = s[i-1]
+            for j in range(1, nLenP+1):
+                curCharP = p[j-1]
+
+                if curCharP == '.' or curCharP == curCharS:
+                    subset[i][j] = subset[i-1][j-1]
+                elif curCharP == '*':
+                    if j <= 1:
+                        # assert(False)
+                        return False        #
+                    else:
+                        if p[j-2] == '.' or p[j-2] == s[i-1]:
+                            subset[i][j] = subset[i-1][j] or subset[i][j-1] or subset[i][j-2]
+                        elif p[j-2] == '*':
+                            # assert(False)
+                            return False
+                        else:
+                            subset[i][j] = subset[i][j-2]
+
                 else:
-                    return False
+                    subset[i][j] = False
+        
+        return subset[nLenS][nLenP]
 
-        while nIndexP < nLenP:
-            curCharP = p[nIndexP]
-
-            if lastCharP == "*":
-                if curCharP == "*":
-                    break
-                else:
-                    lastCharP = curCharP
-                    nIndexP += 1
-            else:
-                if curCharP == "*":
-                    lastCharP = curCharP
-                    nIndexP += 1
-                else:
-                    break
-
-        return nIndexS == nLenS and nIndexP == nLenP
-
-    def isCharEqual(self, a, b):
-        return b == '.' or a == b
-    
-    def isCharSame(self, a, b):
-        return a == b
     
 # 边界
 solutionObj = Solution()
@@ -169,7 +157,7 @@ assert(solutionObj.isMatch("ab", "ba.") == False)# 0
 # 字母+*
 assert(solutionObj.isMatch("aa", "a*") == True)# 0
 assert(solutionObj.isMatch("aaaa", "a*") == True)# 0
-# assert(solutionObj.isMatch("aaaa", "a*a") == True)# 0
+assert(solutionObj.isMatch("aaaa", "a*a") == True)# 0
 
 assert(solutionObj.isMatch("aa", "b*") == False)# 0
 assert(solutionObj.isMatch("aaa", "b*") == False)# 0
@@ -181,8 +169,8 @@ assert(solutionObj.isMatch("abc", ".*") == True)# 0
 
 # 字母+.+*
 assert(solutionObj.isMatch("ab", ".*") == True)# 0
-# assert(solutionObj.isMatch("aab", ".*a*b") == True)# 0
-# assert(solutionObj.isMatch("aab", ".*a*b*") == True)# 0
+assert(solutionObj.isMatch("aab", ".*a*b") == True)# 0
+assert(solutionObj.isMatch("aab", ".*a*b*") == True)# 0
 
 # 未匹配
 assert(solutionObj.isMatch("ab", "ab") == True)# 0
@@ -191,3 +179,8 @@ assert(solutionObj.isMatch("ab", "a") == False)# 0
 # 已知
 assert(solutionObj.isMatch("aa", "a") == False )# 0
 assert(solutionObj.isMatch("mississippi", "mis*is*p*.") == False )# 0
+
+
+assert(solutionObj.isMatch("aab", "c*a*b") == True)# 0
+assert(solutionObj.isMatch("a", ".*..a*") == False)# 0
+assert(solutionObj.isMatch("", ".*") == True)# 0
