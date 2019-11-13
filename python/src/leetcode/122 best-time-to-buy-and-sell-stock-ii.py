@@ -35,15 +35,49 @@
 # 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 # 思路
+# 动态规划
 
 # 复杂度（时间/空间）
 # 时间
 # 空间
 # 代码
 class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        pass
+    # def maxProfit(self, prices: List[int]) -> int:
+    def maxProfit(self, prices):
+        nLen = len(prices)
+        if nLen <= 1:
+            return 0
+        
+        dp_i_20 = 0
+        dp_i_21 = 0
+        dp_i_10 = 0
+        dp_i_11 = 0
+
+        for i in range(i):
+            pass
     
 # 边界
 solution = Solution()
-assert(solution)
+## len(prices) <= 1
+assert(solution.maxProfit([]) == 0)
+assert(solution.maxProfit([1]) == 0)
+
+## len(prices) = 2
+assert(solution.maxProfit([1,4]) == 0)
+assert(solution.maxProfit([4,1]) == 0)
+
+## len(prices) = 3
+assert(solution.maxProfit([1,4,8]) == 7)
+assert(solution.maxProfit([1,8,4]) == 7)
+assert(solution.maxProfit([4,1,8]) == 7)
+assert(solution.maxProfit([4,8,1]) == 4)
+assert(solution.maxProfit([8,1,4]) == 3)
+assert(solution.maxProfit([8,4,1]) == 0)
+
+## len(prices) >= 4
+### 0次交易
+assert(solution.maxProfit([7,6,4,3,1]) == 0)
+### 1次交易
+assert(solution.maxProfit([1,2,3,4,5]) == 4)
+### 2次交易
+assert(solution.maxProfit([7,1,5,3,6,4]) == 7)
