@@ -37,13 +37,53 @@
 # 时间
 # 空间
 # 代码
+
+import sys
 class Solution:
-    def maxProfit(self, prices: List[int], fee: int) -> int:
-        pass
+    # def maxProfit(self, prices: List[int]) -> int:
+    def maxProfit(self, prices, fee):
+        nLen = len(prices)
+
+        if nLen <= 1:
+            return 0
+        
+        dp_i_0 = 0
+        dp_i_1 = -sys.maxsize
+
+        for i in range(nLen):
+            temp = dp_i_0
+            dp_i_0 = max(dp_i_0, dp_i_1 + prices[i])
+            dp_i_1 = max(dp_i_1, temp - prices[i] - fee)
+        
+        return dp_i_0
     
 # 边界
 solution = Solution()
-assert(solution)
+## len(prices) <= 1
+assert(solution.maxProfit([], 2) == 0)
+assert(solution.maxProfit([1], 2) == 0)
+
+## len(prices) = 2
+assert(solution.maxProfit([1,4], 2) == 1)
+assert(solution.maxProfit([4,1], 2) == 0)
+
+## len(prices) = 3
+assert(solution.maxProfit([1,4,8], 2) == 5)
+assert(solution.maxProfit([1,8,4], 2) == 5)
+assert(solution.maxProfit([4,1,8], 2) == 5)
+assert(solution.maxProfit([4,8,1], 2) == 2)
+assert(solution.maxProfit([8,1,4], 2) == 1)
+assert(solution.maxProfit([8,4,1], 2) == 0)
+
+## len(prices) >= 4
+### 0次交易
+assert(solution.maxProfit([7,6,4,3,1], 2) == 0)
+### 1次交易
+assert(solution.maxProfit([1,2,3,4,5], 2) == 2)
+### 2次交易
+assert(solution.maxProfit([7,1,5,3,6,4], 2) == 3)
+### 3次交易
+assert(solution.maxProfit([7,1,5,3,6,4,7], 2) == 4)
 
 
 

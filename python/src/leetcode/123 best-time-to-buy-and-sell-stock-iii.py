@@ -33,3 +33,50 @@
 # 来源：力扣（LeetCode）
 # 链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii
 # 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+import sys
+class Solution:
+    # def maxProfit(self, prices: List[int]) -> int:
+    def maxProfit(self, prices):
+        nLen = len(prices)
+        if nLen <= 1:
+            return 0
+        
+        dp_i_20 = 0
+        dp_i_21 = -sys.maxsize
+        dp_i_10 = 0
+        dp_i_11 = -sys.maxsize
+
+        for i in range(nLen):
+            dp_i_20 = max(dp_i_20, dp_i_21 + prices[i])
+            dp_i_21 = max(dp_i_21, dp_i_10 - prices[i])
+            dp_i_10 = max(dp_i_10, dp_i_11 + prices[i])
+            dp_i_11 = max(dp_i_11, - prices[i])
+        
+        return dp_i_20
+    
+# 边界
+solution = Solution()
+## len(prices) <= 1
+assert(solution.maxProfit([]) == 0)
+assert(solution.maxProfit([1]) == 0)
+
+## len(prices) = 2
+assert(solution.maxProfit([1,4]) == 3)
+assert(solution.maxProfit([4,1]) == 0)
+
+## len(prices) = 3
+assert(solution.maxProfit([1,4,8]) == 7)
+assert(solution.maxProfit([1,8,4]) == 7)
+assert(solution.maxProfit([4,1,8]) == 7)
+assert(solution.maxProfit([4,8,1]) == 4)
+assert(solution.maxProfit([8,1,4]) == 3)
+assert(solution.maxProfit([8,4,1]) == 0)
+
+## len(prices) >= 4
+### 0次交易
+assert(solution.maxProfit([7,6,4,3,1]) == 0)
+### 1次交易
+assert(solution.maxProfit([1,2,3,4,5]) == 4)
+### 2次交易
+assert(solution.maxProfit([7,1,5,3,6,4]) == 7)

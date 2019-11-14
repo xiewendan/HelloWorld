@@ -38,23 +38,27 @@
 # 动态规划
 
 # 复杂度（时间/空间）
-# 时间
-# 空间
+# 时间 
+# 空间 
 # 代码
+import sys
 class Solution:
     # def maxProfit(self, prices: List[int]) -> int:
     def maxProfit(self, prices):
         nLen = len(prices)
+
         if nLen <= 1:
             return 0
         
-        dp_i_20 = 0
-        dp_i_21 = 0
-        dp_i_10 = 0
-        dp_i_11 = 0
+        dp_i_0 = 0
+        dp_i_1 = -sys.maxsize
 
-        for i in range(i):
-            pass
+        for i in range(nLen):
+            temp = dp_i_0
+            dp_i_0 = max(dp_i_0, dp_i_1 + prices[i])
+            dp_i_1 = max(dp_i_1, temp - prices[i])
+        
+        return dp_i_0
     
 # 边界
 solution = Solution()
@@ -63,7 +67,7 @@ assert(solution.maxProfit([]) == 0)
 assert(solution.maxProfit([1]) == 0)
 
 ## len(prices) = 2
-assert(solution.maxProfit([1,4]) == 0)
+assert(solution.maxProfit([1,4]) == 3)
 assert(solution.maxProfit([4,1]) == 0)
 
 ## len(prices) = 3
@@ -81,3 +85,5 @@ assert(solution.maxProfit([7,6,4,3,1]) == 0)
 assert(solution.maxProfit([1,2,3,4,5]) == 4)
 ### 2次交易
 assert(solution.maxProfit([7,1,5,3,6,4]) == 7)
+### 3次交易
+assert(solution.maxProfit([7,1,5,3,6,4,7]) == 10)

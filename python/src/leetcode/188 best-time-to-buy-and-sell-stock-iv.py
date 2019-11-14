@@ -33,11 +33,80 @@
 # 时间
 # 空间
 # 代码
+import sys
 class Solution:
-    def maxProfit(self, k: int, prices: List[int]) -> int:
-        pass
-    pass
+    # def maxProfit(self, k: int, prices: List[int]) -> int:
+    def maxProfit(self, k, prices):
+        nLen = len(prices)
+
+        if nLen <= 1 or k == 0:
+            return 0
+
+        # k = 正无穷
+        if k >= nLen//2:
+            dp_i_0 = 0
+            dp_i_1 = -sys.maxsize
+
+            for i in range(nLen):
+                temp = dp_i_0
+                dp_i_0 = max(dp_i_0, dp_i_1 + prices[i])
+                dp_i_1 = max(dp_i_1, temp - prices[i])
+            
+            return dp_i_0
+        
+        # k = 有限次数
+        dp_i_k_0 = []
+        for i in range(nLen+1):
+            dp_i_k_0.append([0]*(k+1))
+
+        dp_i_k_1 = []
+        for i in range(nLen+1):
+            dp_i_k_1.append([0]*(k+1))
+
+        for j in range(k+1):
+            dp_i_k_1[0][j] = -sys.maxsize
+        for i in range(nLen+1):
+            dp_i_k_1[i][0] = -sys.maxsize
+
+        for i in range(1, nLen+1):
+            for j in range(k,0,-1):
+                dp_i_k_0[i][j] = max(dp_i_k_0[i-1][j], dp_i_k_1[i-1][j] + prices[i-1])
+                dp_i_k_1[i][j] = max(dp_i_k_1[i-1][j], dp_i_k_0[i-1][j-1] - prices[i-1])
+        
+
+        return dp_i_k_0[nLen][k]
     
 # 边界
 solution = Solution()
-assert(solution)
+## len(prices) <= 1
+assert(solution.maxProfit(1, []) == 0)
+assert(solution.maxProfit(1, [1]) == 0)
+
+## len(prices) = 2
+assert(solution.maxProfit(1, [1,4]) == 3)
+assert(solution.maxProfit(2, [1,4]) == 3)
+assert(solution.maxProfit(2, [4,1]) == 0)
+
+## len(prices) = 3
+assert(solution.maxProfit(1, [1,4,8]) == 7)
+assert(solution.maxProfit(1, [1,8,4]) == 7)
+assert(solution.maxProfit(1, [4,1,8]) == 7)
+assert(solution.maxProfit(1, [4,8,1]) == 4)
+assert(solution.maxProfit(1, [8,1,4]) == 3)
+assert(solution.maxProfit(1, [8,4,1]) == 0)
+
+## len(prices) >= 4
+### 0次交易
+assert(solution.maxProfit(1, [7,6,4,3,1]) == 0)
+### 1次交易
+assert(solution.maxProfit(1, [1,2,3,4,5]) == 4)
+### 2次交易
+assert(solution.maxProfit(1, [7,1,5,3,6,4]) == 5)
+assert(solution.maxProfit(2, [7,1,5,3,6,4]) == 7)
+### 3次交易
+assert(solution.maxProfit(0, [7,1,5,3,6,4,7]) == 0)
+assert(solution.maxProfit(1, [7,1,5,3,6,4,7]) == 6)
+assert(solution.maxProfit(2, [7,1,5,3,6,4,7]) == 8)
+assert(solution.maxProfit(3, [7,1,5,3,6,4,7]) == 10)
+assert(solution.maxProfit(4, [7,1,5,3,6,4,7]) == 10)
+assert(solution.maxProfit(5, [7,1,5,3,6,4,7]) == 10)
