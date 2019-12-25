@@ -64,7 +64,8 @@ class Solution:
 
         for i in range(1, nLen+1):
             for count in countSet:
-                if i - count >= 0 and s[i-count:i] in wordDict and dp[i-count]:
+                nLeftCount = i - count
+                if nLeftCount >= 0 and dp[nLeftCount] and s[nLeftCount:i] in wordDict:
                     dp[i] = True
                     break
 
@@ -83,12 +84,14 @@ class Solution:
         
         listRet = []
         for count in countSet:
-            if nLen - count >= 0 and s[nLen - count:nLen] in wordDict and dp[nLen-count]:
-                if nLen - count == 0:
-                    listRet.append(s[nLen - count:nLen])
+            nLeftCount = nLen - count
+            szEnd = s[nLeftCount:nLen]
+            if nLeftCount >= 0 and dp[nLeftCount] and szEnd in wordDict:
+                if nLeftCount == 0:
+                    listRet.append(szEnd)
                 else:
-                    szEnd = ' ' + s[nLen - count:nLen]
-                    listSubWord = self.wordBreakList(s, wordDict, dp, nLen - count, memoization, countSet)
+                    szEnd = ' ' + szEnd
+                    listSubWord = self.wordBreakList(s, wordDict, dp, nLeftCount, memoization, countSet)
 
                     for subWord in listSubWord:
                         listRet.append(subWord + szEnd)
