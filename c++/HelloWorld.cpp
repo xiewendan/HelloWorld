@@ -1,10 +1,10 @@
 #include <iostream>
-
+using namespace std;
+#include <vector>
+#include <string>
 int main()
 {
-    int a = 10;
-    a += 10;
-    std::cout << a << std::endl;
-    std::cout << "hello world! by xjc" << std::endl;
-    return 1;
+    cout << "Hello Vscode1" << endl;
+    vector<string> msg{"Hello", "c++"};
+    return 0;
 }
